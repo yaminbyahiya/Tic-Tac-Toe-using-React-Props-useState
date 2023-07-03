@@ -13,7 +13,30 @@ function Square({value, onSquereClick}){
 
 function App() {
   const [xIsNext, setXIsNext] = useState(true);
-  const [squares, setSquares] = useState(Array(9).fill(null));
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+  function handlePlay(nextSquares){
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  return(
+    <div className='game'>
+      <div className='game-board'>
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}></Board>
+      </div>
+      <div className='game-info'>
+        <ol>
+
+        </ol>
+      </div>
+    </div>
+  )
+}
+
+function Board({ xIsNext, squares, onPlay }){
+  // const [xIsNext, setXIsNext] = useState(true);
+  // const [squares, setSquares] = useState(Array(9).fill(null));
   const winner = calculateWinner(squares);
   let status;
   if(winner){
@@ -31,8 +54,7 @@ function App() {
     }else{
       nextSquares[i]="O";
     }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
   return (
     <>
